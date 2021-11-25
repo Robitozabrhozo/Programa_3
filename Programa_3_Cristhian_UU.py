@@ -74,7 +74,7 @@ def jugar():
 
     #se crean los frames a utilizar:
 
-    titulo_frame = tk.Frame(juego,height=128,width=540)
+    titulo_frame = tk.Frame(juego,height=128,width=540,bg='#5f6160')
     titulo_frame.grid(row=0,column=0,padx=1,pady=1)
     
     nombre_frame = tk.Frame(juego,bg='#b2ff17',height=128,width=350)
@@ -83,26 +83,26 @@ def jugar():
     partida_frame = tk.Frame(juego,bg="#b2ff17",height=450,width=540)
     partida_frame.grid(row=1,column=0,padx=1,pady=1)
 
-    numeral_frame = tk.Frame(juego,bg="#ffdb80",height=450,width=350)
+    numeral_frame = tk.Frame(juego,bg="#b2ff17",height=450,width=350)
     numeral_frame.grid(row=1,column=1,padx=1,pady=1)
     #se hace un frame dentro del frame de numeral
     numeros_frame = tk.Frame(numeral_frame,bg="#b2ff17",height=225,width=350)
     numeros_frame.grid(row=0,column=0,padx=1,pady=1)
     
-    botones_frame = tk.Frame(numeral_frame,bg="#4c05ff",height=225,width=350)
+    botones_frame = tk.Frame(numeral_frame,bg="#b2ff17",height=225,width=350)
     botones_frame.grid(row=1,column=0,padx=1,pady=1)
     ################################################
-    cronometro_frame = tk.Frame(juego,bg="#c105ff",height=315,width=540)
+    cronometro_frame = tk.Frame(juego,bg="#c105ff",height=115,width=540)
     cronometro_frame.grid(row=2,column=0,padx=1,pady=1)
 
-    botones2_frame = tk.Frame(juego,bg="#ff05e6",height=315,width=350)
+    botones2_frame = tk.Frame(juego,bg="#b2ff17",height=115,width=350)
     botones2_frame.grid(row=2,column=1,padx=1,pady=1)
 
     #se crean los botones e interfaz Gráfica
 
     #TITULO
-    titulo = tk.Label(titulo_frame,text='Sudoku',font=("Arial Black",54),bg='#b2ff17')
-    titulo.grid(row=0,column=0)
+    titulo = tk.Label(titulo_frame,text='     Sudoku     ',font=("Arial Black",54),bg='#b2ff17')
+    titulo.grid(row=0,column=0,pady=3,padx=3)
 
     #NOMBRE
     nombre_label=tk.Label(nombre_frame,text='Nombre del jugador',font=("Arial Black",12),bg='#b2ff17')
@@ -131,55 +131,88 @@ def jugar():
                     cuadro.grid(row=i,column=j,padx=2,pady=2)
                     fila.append(cuadro)
                 matriz.append(fila)
+    
 
     #NUMEROS
     
 
     boton_1 =  tk.Button(numeros_frame,text='1',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_1.grid(row=0,column=0,padx=3,pady=3)
 
     boton_2 =  tk.Button(numeros_frame,text='2',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_2.grid(row=0,column=1,padx=3,pady=3)
 
     boton_3 =  tk.Button(numeros_frame,text='3',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_3.grid(row=0,column=2,padx=3,pady=3)
     ###########################################
     boton_4 =  tk.Button(numeros_frame,text='4',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_4.grid(row=1,column=0,padx=3,pady=3)
 
     boton_5 =  tk.Button(numeros_frame,text='5',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_5.grid(row=1,column=1,padx=3,pady=3)
 
     boton_6 =  tk.Button(numeros_frame,text='6',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_6.grid(row=1,column=2,padx=3,pady=3)
     ###########################################
     boton_7 =  tk.Button(numeros_frame,text='7',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_7.grid(row=2,column=0,padx=3,pady=3)
 
     boton_8 =  tk.Button(numeros_frame,text='8',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_8.grid(row=2,column=1,padx=3,pady=3)
 
     boton_9 =  tk.Button(numeros_frame,text='9',
-                              bg='#29f2de', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
     boton_9.grid(row=2,column=2,padx=3,pady=3)
     ###########################################
 
 
 
     #BOTONES DE JUEGO
+    iniciar_boton= tk.Button(botones_frame,text=' Iniciar \n Juego ',
+                              bg='#0b851b', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+    iniciar_boton.grid(row=0,column=0,pady=5,padx=5)
+
+    borrar_boton= tk.Button(botones_frame,text=' Borrar \n Juego ',
+                              bg='#d40f26', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12))
+    borrar_boton.grid(row=0,column=1,pady=5,padx=5)
+
+    terminar_boton= tk.Button(botones_frame,text=' Terminar \n Juego ',
+                              bg='#ba4e18', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12))
+    terminar_boton.grid(row=0,column=3,pady=5,padx=5)
+
+    deshacer_boton= tk.Button(botones_frame,text=' Deshacer \n Jugada ',
+                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+    deshacer_boton.grid(row=1,column=0,pady=5,padx=5)
+
+    rehacer_boton= tk.Button(botones_frame,text=' Rehacer \n Jugada  ',
+                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+    rehacer_boton.grid(row=1,column=1,pady=5,padx=5)
+
+    top_boton= tk.Button(botones_frame,text=' Top \n 10 ',
+                              bg='#f5c507', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+    top_boton.grid(row=1,column=3,pady=5,padx=5)
+    
     
     #CRONOMETRO Y TIMER
+
+    
     
     #BOTONES DE GUARDAR Y CARGAR
+    cargar_boton= tk.Button(botones2_frame,text=' Cargar \n Partida ',
+                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+    cargar_boton.grid(row=0,column=0,pady=1,padx=5)
 
+    guardar_boton= tk.Button(botones2_frame,text=' Guardar \n Partida  ',
+                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+    guardar_boton.grid(row=0,column=1,pady=1,padx=5)
 
 
 
