@@ -23,6 +23,8 @@ nombre=''
 lista=[ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]],
         [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]],
         [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ]
+#Numeral
+numero_actual=0
 #Creamos la ventana principal
 ventana=tk.Tk()
 ventana.title('Juego Sudoku')
@@ -143,42 +145,524 @@ def jugar():
     
 
     boton_1 =  tk.Button(numeros_frame,text='1',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1(),state='disabled')
     boton_1.grid(row=0,column=0,padx=3,pady=3)
 
     boton_2 =  tk.Button(numeros_frame,text='2',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero2(),state='disabled')
     boton_2.grid(row=0,column=1,padx=3,pady=3)
 
     boton_3 =  tk.Button(numeros_frame,text='3',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero3(),state='disabled')
     boton_3.grid(row=0,column=2,padx=3,pady=3)
     ###########################################
     boton_4 =  tk.Button(numeros_frame,text='4',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero4(),state='disabled')
     boton_4.grid(row=1,column=0,padx=3,pady=3)
 
     boton_5 =  tk.Button(numeros_frame,text='5',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero5(),state='disabled')
     boton_5.grid(row=1,column=1,padx=3,pady=3)
 
     boton_6 =  tk.Button(numeros_frame,text='6',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero6(),state='disabled')
     boton_6.grid(row=1,column=2,padx=3,pady=3)
     ###########################################
     boton_7 =  tk.Button(numeros_frame,text='7',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero7(),state='disabled')
     boton_7.grid(row=2,column=0,padx=3,pady=3)
 
     boton_8 =  tk.Button(numeros_frame,text='8',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero8(),state='disabled')
     boton_8.grid(row=2,column=1,padx=3,pady=3)
 
     boton_9 =  tk.Button(numeros_frame,text='9',
-                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,font=("Arial Black",14))
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero9(),state='disabled')
     boton_9.grid(row=2,column=2,padx=3,pady=3)
-    ###########################################
 
+    def numero1():
+        global numero_actual
+        numero_actual==1
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1(),state='disabled')
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+        
+        
+    ###########################################
+    def numero2():
+        global numero_actual
+        numero_actual==2
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2(),state='disabled')
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+
+    def numero3():
+        global numero_actual
+        numero_actual==3
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3(),state='disabled')
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+
+    def numero4():
+        global numero_actual
+        numero_actual==4
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4(),state='disabled')
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+    def numero5():
+        global numero_actual
+        numero_actual==5
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5(),state='disabled')
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+    def numero6():
+        global numero_actual
+        numero_actual==6
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6(),state='disabled')
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+    def numero7():
+        global numero_actual
+        numero_actual==7
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7(),state='disabled')
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+    def numero8():
+        global numero_actual
+        numero_actual==8
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8(),state='disabled')
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+    def numero9():
+        global numero_actual
+        numero_actual==9
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9(),state='disabled')
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+    def resetear_numeral():
+        boton_1 =  tk.Button(numeros_frame,text='1',
+                              bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                         font=("Arial Black",14),command=lambda:numero1())
+        boton_1.grid(row=0,column=0,padx=3,pady=3)
+
+        boton_2 =  tk.Button(numeros_frame,text='2',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero2())
+        boton_2.grid(row=0,column=1,padx=3,pady=3)
+
+        boton_3 =  tk.Button(numeros_frame,text='3',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero3())
+        boton_3.grid(row=0,column=2,padx=3,pady=3)
+        ###########################################
+        boton_4 =  tk.Button(numeros_frame,text='4',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero4())
+        boton_4.grid(row=1,column=0,padx=3,pady=3)
+
+        boton_5 =  tk.Button(numeros_frame,text='5',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero5())
+        boton_5.grid(row=1,column=1,padx=3,pady=3)
+
+        boton_6 =  tk.Button(numeros_frame,text='6',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero6())
+        boton_6.grid(row=1,column=2,padx=3,pady=3)
+        ###########################################
+        boton_7 =  tk.Button(numeros_frame,text='7',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero7())
+        boton_7.grid(row=2,column=0,padx=3,pady=3)
+
+        boton_8 =  tk.Button(numeros_frame,text='8',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero8())
+        boton_8.grid(row=2,column=1,padx=3,pady=3)
+
+        boton_9 =  tk.Button(numeros_frame,text='9',
+                                  bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
+                             font=("Arial Black",14),command=lambda:numero9())
+        boton_9.grid(row=2,column=2,padx=3,pady=3)
+        
 
 
     #BOTONES DE JUEGO
@@ -258,11 +742,18 @@ def jugar():
         iniciar_boton.grid(row=0,column=0,pady=5,padx=5)
 
         ####################################################
-
+        #se habilita el numeral
+        resetear_numeral()
         #imprime el cuadro inicial
 
-        
+        if configuracion[3]=='dificil':
+            
+            pass
+        if configuracion[3]=='facil':
+            pass
 
+        if configuracion[3]=='normal':
+            pass
 
 
 
@@ -275,7 +766,7 @@ Funcion: abre un pdf con el manual de usuario
 '''
 def ayuda():
 
-    os.startfile('manual_de_usuario_2048.pdf')
+    os.startfile('manual_de_usuario_sudoku.pdf')
 
 
 
