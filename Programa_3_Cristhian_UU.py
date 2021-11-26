@@ -17,6 +17,12 @@ import os
 from playsound import playsound
 import pickle
 
+#nombre
+nombre=''
+#lista actual de numeros
+lista=[ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]],
+        [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]],
+        [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ]
 #Creamos la ventana principal
 ventana=tk.Tk()
 ventana.title('Juego Sudoku')
@@ -112,7 +118,7 @@ def jugar():
     nombre_entry.grid(row=1,column=0)
 
     nombre_boton= tk.Button(nombre_frame,text=' Guardar \n Nombre',
-                              bg='#00d9fa', activebackground = '#3091db',height=2,width=10 )
+                              bg='#00d9fa', activebackground = '#3091db',height=2,width=10,command=lambda:guardar_nombre() )
     nombre_boton.grid(row=2,column=0,pady=2)
     
 
@@ -177,7 +183,8 @@ def jugar():
 
     #BOTONES DE JUEGO
     iniciar_boton= tk.Button(botones_frame,text=' Iniciar \n Juego ',
-                              bg='#0b851b', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+                              bg='#0b851b', activebackground = '#646e65',height=2,width=8,
+                             font=("Arial Black",12), command=lambda:iniciar_partida() )
     iniciar_boton.grid(row=0,column=0,pady=5,padx=5)
 
     borrar_boton= tk.Button(botones_frame,text=' Borrar \n Juego ',
@@ -215,13 +222,46 @@ def jugar():
     guardar_boton.grid(row=0,column=1,pady=1,padx=5)
 
 
+    def guardar_nombre():
+        global nombre
+        f=nombre_entry.get()
+        if len(f)>30:
+            showmessage('Error','El nombre no puede exeder los 30 caracteres')
+            return
+        nombre=f
+        showmessage('Éxito',"El nombre se guardo correctamente")
+        
+        
+    def iniciar_partida():
+        #se arreglan aspectos respecto al nombre y se valida
+        global nombre
+        if nombre=='':
+            showmessage('Error','Debe ingresar su nombre antes de empezar a jugar')
+            
+            return
+            
+        nombre_entry=tk.Label(nombre_frame,bg='#b2ff17',
+                              width=30,text=nombre,font=("Arial Black",12) ) 
+        nombre_entry.grid(row=1,column=0)
 
+        nombre_boton= tk.Button(nombre_frame,text='',
+                              bg='#b2ff17', activebackground = '#3091db',
+                                height=2,width=10,state='disabled' ,relief='flat')
+        nombre_boton.grid(row=2,column=0)
+        
+        #####################################################        
+        #se deshabilita el boton de jugar
 
+        iniciar_boton= tk.Button(botones_frame,text=' Iniciar \n Juego ',
+                              bg='#0b851b', activebackground = '#c9c9c9',height=2,width=8,
+                             font=("Arial Black",12), state='disabled')
+        iniciar_boton.grid(row=0,column=0,pady=5,padx=5)
 
+        ####################################################
 
+        #imprime el cuadro inicial
 
-
-
+        
 
 
 
