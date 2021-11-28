@@ -16,13 +16,23 @@ import random
 import os
 from playsound import playsound
 import pickle
-
+#config
+#              reloj   tiempo en timer  dificutad  topx   tipo_numeral
+configuracion=[1,       (0,0,0),        1,         0,     ['1','2','3','4','5','6','7','8','9'] ]
+datos_timer=(0,0,0)
+tipo_numeral=['1','2','3','4','5','6','7','8','9']
+topx=0
 #nombre
 nombre=''
+#tiempo
+tiempo=(0,0,0)
+h=0
+m=0
+s=0
 #lista actual de numeros
-lista=[ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]],
-        [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]],
-        [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ]
+lista=[ [ [[0,1,0],[0,0,0],[0,1,0]], [[0,1,0],[0,0,0],[0,1,0]], [[0,0,0],[0,0,0],[0,0,0]] ],
+        [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ],
+        [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,1]] ]  ]
 #Numeral
 numero_actual=0
 #Creamos la ventana principal
@@ -46,7 +56,7 @@ jugar_boton= tk.Button(ventana,text='Jugar',
 jugar_boton.grid(row=1,column=0,pady=5)
 
 configurar_boton= tk.Button(ventana,text='Configurar',
-                              bg='#00d9fa', activebackground = '#3091db',height=2,width=10 ,command= lambda:configurar())
+                              bg='#00d9fa', activebackground = '#3091db',height=2,width=10 ,command= lambda:configuracion_sudoku())
 configurar_boton.grid(row=2,column=0,pady=5)
 
 ayuda_boton= tk.Button(ventana,text='Ayuda',
@@ -125,20 +135,19 @@ def jugar():
     
 
     #CUADRO DE JUEGO
-    matriz=[]
     
-    for x in range (3):
-        for y in range (3):
-            partida2_frame = tk.Frame(partida_frame,bg="#b2ff17")
-            partida2_frame.grid(row=x,column=y,padx=5,pady=5)
-            for i in range(3):
-                fila = []
-                for j in range(3):
-                    cuadro =  tk.Button(partida2_frame,text='',
-                                      bg='#e4e9f2', activebackground = '#a5a9b0',height=2,width=6,state='disabled' )
-                    cuadro.grid(row=i,column=j,padx=2,pady=2)
-                    fila.append(cuadro)
-                matriz.append(fila)
+    def resetear_juego():
+        for x in range (3):
+            for y in range (3):
+                partida2_frame = tk.Frame(partida_frame,bg="#b2ff17")
+                partida2_frame.grid(row=x,column=y,padx=5,pady=5)
+                for i in range(3):
+                    for j in range(3):
+                        cuadro =  tk.Button(partida2_frame,text='',
+                                          bg='#e4e9f2', activebackground = '#a5a9b0',height=2,width=6,state='disabled' )
+                        cuadro.grid(row=i,column=j,padx=2,pady=2)
+    resetear_juego()
+                
     
 
     #NUMEROS
@@ -705,7 +714,27 @@ def jugar():
                               bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
     guardar_boton.grid(row=0,column=1,pady=1,padx=5)
 
+    #funcion para imprimir
 
+    def imprimir(lista):
+
+        for x in range (3):
+            for y in range (3):
+                partida2_frame = tk.Frame(partida_frame,bg="#b2ff17")
+                partida2_frame.grid(row=x,column=y,padx=5,pady=5)
+                for i in range(3):
+                    for j in range(3):
+                        if lista[x][y][i][j]==0:
+                            cuadro =  tk.Button(partida2_frame,text='',
+                                              bg='#e4e9f2', activebackground = '#a5a9b0',height=2,width=6 )
+                            cuadro.grid(row=i,column=j,padx=2,pady=2)
+                        else:
+                            cuadro =  tk.Button(partida2_frame,text=lista[x][y][i][j],
+                                              bg='#d4a763', activebackground = '#a5a9b0',height=2,width=6,state='disabled' )
+                            cuadro.grid(row=i,column=j,padx=2,pady=2)
+
+        
+        
     def guardar_nombre():
         global nombre
         f=nombre_entry.get()
@@ -718,7 +747,7 @@ def jugar():
         
     def iniciar_partida():
         #se arreglan aspectos respecto al nombre y se valida
-        global nombre
+        global nombre,lista
         if nombre=='':
             showmessage('Error','Debe ingresar su nombre antes de empezar a jugar')
             
@@ -745,7 +774,7 @@ def jugar():
         #se habilita el numeral
         resetear_numeral()
         #imprime el cuadro inicial
-
+        imprimir(lista)
         if configuracion[3]=='dificil':
             
             pass
@@ -755,9 +784,204 @@ def jugar():
         if configuracion[3]=='normal':
             pass
 
+#funcion configuracion
+
+def configuracion_sudoku():
+
+    configuracionv=tk.Toplevel(ventana)
+    configuracionv.title('2048 config')
+    configuracionv.geometry('700x700')
+    configuracionv.config(bg='#096eba')
+    configuracionv.resizable(False,False)
+
+    def set_timer():
+        
+        h = tk.Entry(conframe,bg="#defdff",width=2)
+        h.grid(row=2,column=1,pady=1)
+        m= tk.Entry(conframe,bg="#defdff",width=2)
+        m.grid(row=2,column=2,pady=1)
+        s= tk.Entry(conframe,bg="#defdff",width=2)
+        s.grid(row=2,column=3,pady=1)
+        set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,width=6,command=lambda :fijar_timer(h,m,s))
+        set_time.grid(row=3,column=3,padx=10,pady=20)
+    def no_timer():
+        h = tk.Entry(conframe,bg="#defdff",width=2,state='disabled')
+        h.grid(row=2,column=1)
+        m= tk.Entry(conframe,bg="#defdff",width=2,state='disabled')
+        m.grid(row=2,column=2)
+        s= tk.Entry(conframe,bg="#defdff",width=2,state='disabled')
+        s.grid(row=2,column=3)
+        
+        #boton fijar timer
+        set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,width=6,
+                           state='disabled',command=lambda :fijar_timer(h,m,s)) 
+        set_time.grid(row=3,column=3,padx=10,pady=20)
 
 
 
+        
+    def fijar_timer(h,m,s):
+        global datos_timer
+        horas=h.get()
+        minutos=m.get()
+        segundos=s.get()
+        if horas=='':
+            horas=0
+        if minutos=='':
+            minutos=0
+        if segundos=='':
+            segundos=0
+        
+        try:
+            horas=int (horas)
+            minutos=int (minutos)
+            segundos=int (segundos)
+            #confirma que los valores de cada dato sean los correctos
+            if  horas==0 and minutos==0 and segundos==0:
+                showmessage('Error!','Timer vacio')
+                return
+            elif horas>4 or horas<0:
+                showmessage('Error!','El formato ingresado es incorrecto')
+                h = tk.Entry(conframe,bg="#defdff",width=2)
+                h.grid(row=2,column=1,pady=1)
+                m= tk.Entry(conframe,bg="#defdff",width=2)
+                m.grid(row=2,column=2,pady=1)
+                s= tk.Entry(conframe,bg="#defdff",width=2)
+                s.grid(row=2,column=3,pady=1)
+                set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',
+                                   height=1,width=6,command=lambda :fijar_timer(h,m,s))
+                set_time.grid(row=3,column=3,padx=10,pady=20)
+                return
+            elif minutos>59 or minutos<0:
+                showmessage('Error!','El formato ingresado es incorrecto')
+                h = tk.Entry(conframe,bg="#defdff",width=2)
+                h.grid(row=2,column=1,pady=1)
+                m= tk.Entry(conframe,bg="#defdff",width=2)
+                m.grid(row=2,column=2,pady=1)
+                s= tk.Entry(conframe,bg="#defdff",width=2)
+                s.grid(row=2,column=3,pady=1)
+                set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,
+                                   width=6,command=lambda :fijar_timer(h,m,s))
+                set_time.grid(row=3,column=3,padx=10,pady=20)
+                return
+            elif segundos>59 or segundos<0:
+                showmessage('Error!','El formato ingresado es incorrecto')
+                h = tk.Entry(conframe,bg="#defdff",width=2)
+                h.grid(row=2,column=1,pady=1)
+                m= tk.Entry(conframe,bg="#defdff",width=2)
+                m.grid(row=2,column=2,pady=1)
+                s= tk.Entry(conframe,bg="#defdff",width=2)
+                s.grid(row=2,column=3,pady=1)
+                set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,
+                                   width=6,command=lambda :fijar_timer(h,m,s))
+                set_time.grid(row=3,column=3,padx=10,pady=20)
+                return
+            
+            datos_timer=(horas,minutos,segundos)
+            showmessage('Timer agregado','Pulse fijar configuración para guardar los datos de configuración')
+            return
+        except:
+            showmessage('Error!','El formato ingresado es incorrecto')
+            h = tk.Entry(conframe,bg="#defdff",width=2)
+            h.grid(row=2,column=1,pady=1)
+            m= tk.Entry(conframe,bg="#defdff",width=2)
+            m.grid(row=2,column=2,pady=1)
+            s= tk.Entry(conframe,bg="#defdff",width=2)
+            s.grid(row=2,column=3,pady=1)
+            set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,
+                               width=6,command=lambda :fijar_timer(h,m,s))
+            set_time.grid(row=3,column=3,padx=10,pady=20)
+            return
+        
+                
+                
+            
+            
+        
+    def fijar_config(reloj,dificultad):
+
+        global configuracion,datos_timer,tipo_numeral,topx
+        if datos_timer == (0,0,0) and reloj ==2:
+           showmessage('Error!','Si desea usar la opcion Timer debe configurar '
+                       'el tiempo deseado, antes de guardar los datos.')
+           return
+        if reloj==1 or reloj==3:
+            datos_timer=(0,0,0)
+            configuracion=(reloj,(0,0,0),dificultad,topx,tipo_numeral)
+            messagebox.showinfo('Lo tenemos!','Informacion Guardada Correctamente!',parent=configuracionv)
+            configuracionv.destroy()
+        else:
+            configuracion=(reloj,datos_timer,dificultad,topx,tipo_numeral)
+            showmessage('Lo tenemos!','Informacion Guardada Correctamente!')
+            configuracionv.destroy()
+        
+    #frame1
+    conframe=tk.Frame(configuracionv,bg="#29d1ff",height=130,width=150)
+    conframe.grid(row=0,column=0,padx=10,pady=10)
+    #frame2
+    conframe2=tk.Frame(configuracionv,bg="#29d1ff",height=130,width=150)
+    conframe2.grid(row=1,column=0,padx=1,pady=1)
+    #frame3
+    conframe3=tk.Frame(configuracionv,bg="#b703ff",height=130,width=250)
+    conframe3.grid(row=0,column=1,padx=1,pady=1)
+    #opcion tiempo
+    
+    opcion=tk.IntVar()
+    reloj=Radiobutton(conframe, text = "Cronómetro", value = 1,variable=opcion,width=12,
+                      bg="#29d1ff",command=lambda:no_timer(),justify='left')
+    reloj.select()
+    reloj.grid(row=1,column=0)
+    timer=Radiobutton(conframe, text = "Timer            ", value = 2,variable=opcion,width=12,
+                      bg='#29d1ff',command=lambda:set_timer(),justify='left')
+    timer.deselect()
+    timer.grid(row=2,column=0)
+    no=Radiobutton(conframe, text =    "Sin tiempo   ", value = 3,variable=opcion,width=12,
+                   bg="#29d1ff",command=lambda:no_timer(),justify='left')
+    no.grid(row=3,column=0)
+
+    #reloj configurable
+    
+    cuadro = tk.Label(conframe,bg="#2494b3",height=1,width=10,text='Tiempo',font=("Arial Black",13))
+    cuadro.grid(row=0,column=0,padx=1,pady=1)
+    
+    cuadro = tk.Label(conframe,bg="#2494b3",height=1,width=6,text='Horas')
+    cuadro.grid(row=1,column=1,padx=1,pady=2)
+    cuadro = tk.Label(conframe,bg="#2494b3",height=1,width=6,text='Minutos')
+    cuadro.grid(row=1,column=2,padx=1,pady=2)
+    cuadro = tk.Label(conframe,bg="#2494b3",height=1,width=9,text='Segundos')
+    cuadro.grid(row=1,column=3,padx=1,pady=2)
+           
+    h = tk.Entry(conframe,bg="#defdff",width=2,state='disabled')
+    h.grid(row=2,column=1)
+    m= tk.Entry(conframe,bg="#defdff",width=2,state='disabled')
+    m.grid(row=2,column=2)
+    s= tk.Entry(conframe,bg="#defdff",width=2,state='disabled')
+    s.grid(row=2,column=3)
+    
+    #boton fijar timer
+    set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,width=6,
+                       state='disabled',command=lambda :fijar_timer(h,m,s)) 
+    set_time.grid(row=3,column=3,padx=10,pady=20)
+    #boton fijar conf
+    set_time=tk.Button(conframe2,text='Fijar Configuracion', bg='#1ee373', activebackground = '#00d9fa',
+                       height=1,width=15,command=lambda :fijar_config(opcion.get(),opcion2.get())) 
+    set_time.grid(row=4,column=0,padx=10,pady=10)
+    
+    
+    cuadro = tk.Label(conframe2,bg="#2494b3",height=1,width=20,text='Dificultad',font=("Arial Black",13))
+    cuadro.grid(row=0,column=0,padx=1,pady=1)
+    opcion2=tk.IntVar()
+    dificultad_facil=Radiobutton(conframe2, text = "Fácil", value = 1,variable=opcion2,width=5,bg="#2494b3")
+    dificultad_facil.select()
+    dificultad_facil.grid(row=1,column=0)
+    
+    dificultad_normal=Radiobutton(conframe2, text = "Normal", value = 2,variable=opcion2,width=5,bg="#2494b3")
+    dificultad_normal.grid(row=2,column=0)
+    
+    dificultad_dificil=Radiobutton(conframe2, text = "Díficil", value = 3,variable=opcion2,width=5,bg="#2494b3")
+    dificultad_dificil.grid(row=3,column=0)
+
+   
 #funcion ayuda
 '''
 Entradas: un click en la interfaz
