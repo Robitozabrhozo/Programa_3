@@ -789,21 +789,53 @@ def jugar():
 def configuracion_sudoku():
 
     configuracionv=tk.Toplevel(ventana)
-    configuracionv.title('2048 config')
-    configuracionv.geometry('700x700')
+    configuracionv.title('Configuracion Sudoku')
+    configuracionv.geometry('630x350')
     configuracionv.config(bg='#096eba')
     configuracionv.resizable(False,False)
 
-    def set_timer():
+    def set_timer(dificultad):
         
-        h = tk.Entry(conframe,bg="#defdff",width=2)
-        h.grid(row=2,column=1,pady=1)
-        m= tk.Entry(conframe,bg="#defdff",width=2)
-        m.grid(row=2,column=2,pady=1)
-        s= tk.Entry(conframe,bg="#defdff",width=2)
-        s.grid(row=2,column=3,pady=1)
-        set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,width=6,command=lambda :fijar_timer(h,m,s))
-        set_time.grid(row=3,column=3,padx=10,pady=20)
+        if dificultad==1:
+            
+            h = tk.Entry(conframe,bg="#defdff",width=2)
+            h.insert(0,'0')
+            h.grid(row=2,column=1,pady=1)
+            m= tk.Entry(conframe,bg="#defdff",width=2)
+            m.insert(0,'30')
+            m.grid(row=2,column=2,pady=1)
+            s= tk.Entry(conframe,bg="#defdff",width=2)
+            s.insert(0,'0')
+            s.grid(row=2,column=3,pady=1)
+            set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,
+                               width=6,command=lambda :fijar_timer(h,m,s))
+            set_time.grid(row=3,column=3,padx=10,pady=20)
+        if dificultad==2:
+            h = tk.Entry(conframe,bg="#defdff",width=2)
+            h.insert(0,'1')
+            h.grid(row=2,column=1,pady=1)
+            m= tk.Entry(conframe,bg="#defdff",width=2)
+            m.insert(0,'0')
+            m.grid(row=2,column=2,pady=1)
+            s= tk.Entry(conframe,bg="#defdff",width=2)
+            s.insert(0,'0')
+            s.grid(row=2,column=3,pady=1)
+            set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,
+                               width=6,command=lambda :fijar_timer(h,m,s))
+            set_time.grid(row=3,column=3,padx=10,pady=20)
+        if dificultad==3:
+            h = tk.Entry(conframe,bg="#defdff",width=2)
+            h.insert(0,'2')
+            h.grid(row=2,column=1,pady=1)
+            m= tk.Entry(conframe,bg="#defdff",width=2)
+            m.insert(0,'0')
+            m.grid(row=2,column=2,pady=1)
+            s= tk.Entry(conframe,bg="#defdff",width=2)
+            s.insert(0,'0')
+            s.grid(row=2,column=3,pady=1)
+            set_time=tk.Button(conframe,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',height=1,
+                               width=6,command=lambda :fijar_timer(h,m,s))
+            set_time.grid(row=3,column=3,padx=10,pady=20)
     def no_timer():
         h = tk.Entry(conframe,bg="#defdff",width=2,state='disabled')
         h.grid(row=2,column=1)
@@ -838,10 +870,10 @@ def configuracion_sudoku():
             segundos=int (segundos)
             #confirma que los valores de cada dato sean los correctos
             if  horas==0 and minutos==0 and segundos==0:
-                showmessage('Error!','Timer vacio')
+                messagebox.showinfo('Error!','Timer vacio',parent=configuracionv)
                 return
             elif horas>4 or horas<0:
-                showmessage('Error!','El formato ingresado es incorrecto')
+                messagebox.showinfo('Error!','El formato ingresado es incorrecto',parent=configuracionv)
                 h = tk.Entry(conframe,bg="#defdff",width=2)
                 h.grid(row=2,column=1,pady=1)
                 m= tk.Entry(conframe,bg="#defdff",width=2)
@@ -853,7 +885,7 @@ def configuracion_sudoku():
                 set_time.grid(row=3,column=3,padx=10,pady=20)
                 return
             elif minutos>59 or minutos<0:
-                showmessage('Error!','El formato ingresado es incorrecto')
+                messagebox.showinfo('Error!','El formato ingresado es incorrecto',parent=configuracionv)
                 h = tk.Entry(conframe,bg="#defdff",width=2)
                 h.grid(row=2,column=1,pady=1)
                 m= tk.Entry(conframe,bg="#defdff",width=2)
@@ -865,7 +897,7 @@ def configuracion_sudoku():
                 set_time.grid(row=3,column=3,padx=10,pady=20)
                 return
             elif segundos>59 or segundos<0:
-                showmessage('Error!','El formato ingresado es incorrecto')
+                messagebox.showinfo('Error!','El formato ingresado es incorrecto',parent=configuracionv)
                 h = tk.Entry(conframe,bg="#defdff",width=2)
                 h.grid(row=2,column=1,pady=1)
                 m= tk.Entry(conframe,bg="#defdff",width=2)
@@ -878,10 +910,10 @@ def configuracion_sudoku():
                 return
             
             datos_timer=(horas,minutos,segundos)
-            showmessage('Timer agregado','Pulse fijar configuración para guardar los datos de configuración')
+            messagebox.showinfo('Timer agregado','Pulse fijar configuración para guardar los datos de configuración',parent=configuracionv)
             return
         except:
-            showmessage('Error!','El formato ingresado es incorrecto')
+            messagebox.showinfo('Error!','El formato ingresado es incorrecto',parent=configuracionv)
             h = tk.Entry(conframe,bg="#defdff",width=2)
             h.grid(row=2,column=1,pady=1)
             m= tk.Entry(conframe,bg="#defdff",width=2)
@@ -898,21 +930,34 @@ def configuracion_sudoku():
             
             
         
-    def fijar_config(reloj,dificultad):
+    def fijar_config(reloj,dificultad,numeral):
 
         global configuracion,datos_timer,tipo_numeral,topx
+        if numeral==1:
+            tipo_numeral=['1','2','3','4','5','6','7','8','9']
+        if numeral==2:
+            tipo_numeral=['A','B','C','D','E','F','G','H','I']
+        
+        if numeral==3 and tipo_numeral==['1','2','3','4','5','6','7','8','9']:
+            messagebox.showinfo('Error!','Si desea usar la opcion Personalizar debe configurar '
+                       'los caracteres deseados y guardarlos, antes de guardar los datos.',parent=configuracionv)
+            return
+            
         if datos_timer == (0,0,0) and reloj ==2:
-           showmessage('Error!','Si desea usar la opcion Timer debe configurar '
-                       'el tiempo deseado, antes de guardar los datos.')
+           messagebox.showinfo('Error!','Si desea usar la opcion Timer debe configurar '
+                       'el tiempo deseado, antes de guardar los datos.',parent=configuracionv)
            return
         if reloj==1 or reloj==3:
             datos_timer=(0,0,0)
             configuracion=(reloj,(0,0,0),dificultad,topx,tipo_numeral)
             messagebox.showinfo('Lo tenemos!','Informacion Guardada Correctamente!',parent=configuracionv)
+            print(configuracion)
             configuracionv.destroy()
+            
         else:
             configuracion=(reloj,datos_timer,dificultad,topx,tipo_numeral)
-            showmessage('Lo tenemos!','Informacion Guardada Correctamente!')
+            messagebox.showinfo('Lo tenemos!','Informacion Guardada Correctamente!',parent=configuracionv)
+            print(configuracion)
             configuracionv.destroy()
         
     #frame1
@@ -921,22 +966,20 @@ def configuracion_sudoku():
     #frame2
     conframe2=tk.Frame(configuracionv,bg="#29d1ff",height=130,width=150)
     conframe2.grid(row=1,column=0,padx=1,pady=1)
-    #frame3
-    conframe3=tk.Frame(configuracionv,bg="#b703ff",height=130,width=250)
-    conframe3.grid(row=0,column=1,padx=1,pady=1)
+    
     #opcion tiempo
     
     opcion=tk.IntVar()
     reloj=Radiobutton(conframe, text = "Cronómetro", value = 1,variable=opcion,width=12,
-                      bg="#29d1ff",command=lambda:no_timer(),justify='left')
+                      bg="#29d1ff",command=lambda:no_timer())
     reloj.select()
     reloj.grid(row=1,column=0)
     timer=Radiobutton(conframe, text = "Timer            ", value = 2,variable=opcion,width=12,
-                      bg='#29d1ff',command=lambda:set_timer(),justify='left')
+                      bg='#29d1ff',command=lambda:set_timer(opcion2.get() ))
     timer.deselect()
     timer.grid(row=2,column=0)
     no=Radiobutton(conframe, text =    "Sin tiempo   ", value = 3,variable=opcion,width=12,
-                   bg="#29d1ff",command=lambda:no_timer(),justify='left')
+                   bg="#29d1ff",command=lambda:no_timer())
     no.grid(row=3,column=0)
 
     #reloj configurable
@@ -964,11 +1007,11 @@ def configuracion_sudoku():
     set_time.grid(row=3,column=3,padx=10,pady=20)
     #boton fijar conf
     set_time=tk.Button(conframe2,text='Fijar Configuracion', bg='#1ee373', activebackground = '#00d9fa',
-                       height=1,width=15,command=lambda :fijar_config(opcion.get(),opcion2.get())) 
+                       height=1,width=15,command=lambda :fijar_config(opcion.get(),opcion2.get(),opcion3.get())) 
     set_time.grid(row=4,column=0,padx=10,pady=10)
     
     
-    cuadro = tk.Label(conframe2,bg="#2494b3",height=1,width=20,text='Dificultad',font=("Arial Black",13))
+    cuadro = tk.Label(conframe2,bg="#2494b3",height=1,width=24,text='Dificultad',font=("Arial Black",13))
     cuadro.grid(row=0,column=0,padx=1,pady=1)
     opcion2=tk.IntVar()
     dificultad_facil=Radiobutton(conframe2, text = "Fácil", value = 1,variable=opcion2,width=5,bg="#2494b3")
@@ -981,6 +1024,139 @@ def configuracion_sudoku():
     dificultad_dificil=Radiobutton(conframe2, text = "Díficil", value = 3,variable=opcion2,width=5,bg="#2494b3")
     dificultad_dificil.grid(row=3,column=0)
 
+    #Cantidad de jugadas topx
+    #frame3
+    conframe3=tk.Frame(configuracionv,bg="#29d1ff",height=130,width=250)
+    conframe3.grid(row=0,column=1,padx=1,pady=1)
+    cuadro = tk.Label(conframe3,bg="#2494b3",height=1,width=24,text=' Cantidad de jugadas top ',font=("Arial Black",13))
+    cuadro.grid(row=0,column=0,padx=1,pady=1)
+    h = tk.Entry(conframe3,bg="#defdff",width=3)
+    h.grid(row=1,column=0,pady=20)
+    set_topx=tk.Button(conframe3,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',
+                                   height=1,width=6,command=lambda :guardar_topx(h.get() ))
+    set_topx.grid(row=2,column=0,padx=1,pady=13)
+    def guardar_topx(valor):
+        global topx
+        try:
+            valor=int(valor)
+            if valor>100:
+                messagebox.showinfo('Error!',' Dato ingresado incorrecto ',parent=configuracionv)
+                return
+            if valor<0:
+                messagbox.showinfo('Error!',' Dato ingresado incorrecto ',parent=configuracionv)
+                return
+            
+            topx=valor
+            messagebox.showinfo('Valor Agregado!',' Pulse en Guardar Configuracion para registrar todos los datos'
+                                ,parent=configuracionv)
+
+
+        except:
+            messagebox.showinfo('Error!',' Dato ingresado incorrecto ',parent=configuracionv)
+    #frame4
+    conframe4=tk.Frame(configuracionv,bg="#29d1ff",height=151,width=250)
+    conframe4.grid(row=1,column=1,padx=1,pady=1)
+
+    cuadro = tk.Label(conframe4,bg="#2494b3",height=1,width=24,text='Elementos del juego',font=("Arial Black",13))
+    cuadro.grid(row=0,column=0,padx=1,pady=1)
+    opcion3=tk.IntVar()
+    numeros=Radiobutton(conframe4, text = "1 2 3 4 5 6 7 8 9  ", value = 1,variable=opcion3,
+                        width=15,bg="#29d1ff",command=lambda:personalizar_no())
+    numeros.select()
+    numeros.grid(row=1,column=0)
+    
+    letras=Radiobutton(conframe4, text = "A B C D E F G H I", value = 2,variable=opcion3,
+                       width=15,bg="#29d1ff",command=lambda:personalizar_no())
+    letras.grid(row=2,column=0)
+    
+    personalizado=Radiobutton(conframe4, text = "Personalizar        ", value = 3,variable=opcion3,
+                              width=15,bg="#29d1ff",command=lambda:personalizar_si())
+    personalizado.grid(row=3,column=0)
+    #frame 5 para los entrys
+    conframe5=tk.Frame(conframe4,bg="#29d1ff",height=4,width=250)
+    conframe5.grid(row=4,column=0,padx=1,pady=1)
+    def guardar_valores(lista):
+        global tipo_numeral
+
+        for a in lista:
+            if a =='' or len(a)!= 1:
+                messagebox.showinfo('Error','Los datos ingresados no son validos, exeden un caracter o estan incompletos',parent=configuracionv)
+                personalizar_si()
+                return
+        tipo_numeral=lista
+        messagebox.showinfo('Valores Agregados!',' Pulse en Guardar Configuracion para registrar todos los datos de configuracion'
+                                ,parent=configuracionv)
+        
+                
+    def personalizar_no():
+        primer_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        primer_valor.grid(row=0,column=0,padx=3)
+        
+        segundo_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        segundo_valor.grid(row=0,column=1,padx=3)
+        
+        tercer_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        tercer_valor.grid(row=0,column=2,padx=3)
+        
+        cuarto_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        cuarto_valor.grid(row=0,column=3,padx=3)
+        
+        quinto_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        quinto_valor.grid(row=0,column=4,padx=3)
+        
+        sexto_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        sexto_valor.grid(row=0,column=5,padx=3)
+        
+        septimo_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        septimo_valor.grid(row=0,column=6,padx=3)
+        
+        octavo_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        octavo_valor.grid(row=0,column=7,padx=3)
+        
+        noveno_valor = tk.Entry(conframe5,bg="#defdff",width=1,state='disabled')
+        noveno_valor.grid(row=0,column=8,padx=3)
+        
+        set_valor=tk.Button(conframe4,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',
+                                       height=1,width=6 ,state='disabled')
+        set_valor.grid(row=5,column=0,padx=1,pady=1)
+    personalizar_no()
+
+    def personalizar_si():
+        primer_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        primer_valor.grid(row=0,column=0,padx=3)
+        
+        segundo_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        segundo_valor.grid(row=0,column=1,padx=3)
+        
+        tercer_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        tercer_valor.grid(row=0,column=2,padx=3)
+        
+        cuarto_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        cuarto_valor.grid(row=0,column=3,padx=3)
+        
+        quinto_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        quinto_valor.grid(row=0,column=4,padx=3)
+        
+        sexto_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        sexto_valor.grid(row=0,column=5,padx=3)
+        
+        septimo_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        septimo_valor.grid(row=0,column=6,padx=3)
+        
+        octavo_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        octavo_valor.grid(row=0,column=7,padx=3)
+        
+        noveno_valor = tk.Entry(conframe5,bg="#defdff",width=1)
+        noveno_valor.grid(row=0,column=8,padx=3)
+        
+        set_valor=tk.Button(conframe4,text='Aceptar', bg='#3091db', activebackground = '#00d9fa',
+                                       height=1,width=6,
+                            command=lambda :guardar_valores( [ primer_valor.get(),segundo_valor.get(),tercer_valor.get(),
+                                                               cuarto_valor.get(),quinto_valor.get(),sexto_valor.get(),
+                                                               septimo_valor.get(),octavo_valor.get(),noveno_valor.get()]     ) )
+        set_valor.grid(row=5,column=0,padx=1,pady=1)
+            
+    
    
 #funcion ayuda
 '''
