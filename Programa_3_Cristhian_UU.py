@@ -16,6 +16,9 @@ import random
 import os
 from playsound import playsound
 import pickle
+from functools import partial
+from copy import deepcopy
+inicio_juego=0
 #config
 #              reloj   tiempo en timer  dificutad  topx   tipo_numeral
 configuracion=[1,       (0,0,0),        1,         0,     ['1','2','3','4','5','6','7','8','9'] ]
@@ -25,6 +28,7 @@ topx=0
 #nombre
 nombre=''
 #tiempo
+time_out=0
 tiempo=(0,0,0)
 h=0
 m=0
@@ -33,8 +37,12 @@ s=0
 lista=[ [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ],
         [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ],
         [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ]  ]
+lista_inicial=[]
 #Numeral
 numero_actual=0
+#jugadas
+jugadas=[]
+jugadas_eliminadas=[]
 #Creamos la ventana principal
 ventana=tk.Tk()
 ventana.title('Juego Sudoku')
@@ -64,7 +72,7 @@ ayuda_boton= tk.Button(ventana,text='Ayuda',
 ayuda_boton.grid(row=3,column=0,pady=5)
     
 Acerca_de_boton= tk.Button(ventana,text='Acerca de',
-                              bg='#00d9fa', activebackground = '#3091db',height=2,width=10 ,command= lambda:showmessage ('Acerca del Programa ',
+                              bg='#00d9fa', activebackground = '#3091db',height=2,width=10 ,command= lambda:messagebox.showinfo('Acerca del Programa ',
                                                                  'Creador: Cristhian UU \n'
                                                                    'Nombre del programa: programa_3_Cristhian_Ureña_Ureña'
                                                                  '\n Version:1.0 \n Fecha de creacion 1/12/2021' ))
@@ -89,10 +97,18 @@ def jugar():
     juego.config(bg='#b2ff17')
     juego.resizable(False,False)
 
-
+    #funcion showmessage
+    '''
+    Entradas: dos string
+    Salidas: interfaz estilo cuandro de texto
+    Funcion: proyecta un cuadro de texto con el titulo y el mensaje indicado
+    '''
+    def showmessage(titulo, mensaje):
+        messagebox.showinfo(titulo,mensaje,parent=juego)
+        
     #se crean los frames a utilizar:
 
-    titulo_frame = tk.Frame(juego,height=128,width=540,bg='#5f6160')
+    titulo_frame = tk.Frame(juego,height=128,width=540,bg='#04b020')
     titulo_frame.grid(row=0,column=0,padx=1,pady=1)
     
     nombre_frame = tk.Frame(juego,bg='#b2ff17',height=128,width=350)
@@ -199,8 +215,8 @@ def jugar():
     boton_9.grid(row=2,column=2,padx=3,pady=3)
 
     def numero1():
-        global numero_actual
-        numero_actual==1
+        global numero_actual 
+        numero_actual=1
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
                          font=("Arial Black",14),command=lambda:numero1(),state='disabled')
@@ -249,8 +265,8 @@ def jugar():
         
     ###########################################
     def numero2():
-        global numero_actual
-        numero_actual==2
+        global numero_actual 
+        numero_actual=2
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
                          font=("Arial Black",14),command=lambda:numero1())
@@ -298,7 +314,7 @@ def jugar():
 
     def numero3():
         global numero_actual
-        numero_actual==3
+        numero_actual=3
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
                          font=("Arial Black",14),command=lambda:numero1())
@@ -346,7 +362,7 @@ def jugar():
 
     def numero4():
         global numero_actual
-        numero_actual==4
+        numero_actual=4
        
         
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
@@ -396,7 +412,7 @@ def jugar():
         
     def numero5():
         global numero_actual
-        numero_actual==5
+        numero_actual=5
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
                          font=("Arial Black",14),command=lambda:numero1())
@@ -444,8 +460,8 @@ def jugar():
 
         
     def numero6():
-        global numero_actual
-        numero_actual==6
+        global numero_actual 
+        numero_actual=6
        
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
@@ -492,8 +508,8 @@ def jugar():
         boton_9.grid(row=2,column=2,padx=3,pady=3)
         
     def numero7():
-        global numero_actual
-        numero_actual==7
+        global numero_actual 
+        numero_actual=7
 
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
@@ -541,7 +557,7 @@ def jugar():
         boton_9.grid(row=2,column=2,padx=3,pady=3)
     def numero8():
         global numero_actual
-        numero_actual==8
+        numero_actual=8
 
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
@@ -589,7 +605,7 @@ def jugar():
         boton_9.grid(row=2,column=2,padx=3,pady=3)
     def numero9():
         global numero_actual
-        numero_actual==9
+        numero_actual=9
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
                          font=("Arial Black",14),command=lambda:numero1())
@@ -689,19 +705,23 @@ def jugar():
     iniciar_boton.grid(row=0,column=0,pady=5,padx=5)
 
     borrar_boton= tk.Button(botones_frame,text=' Borrar \n Juego ',
-                              bg='#d40f26', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12))
+                              bg='#d40f26', activebackground = '#646e65',height=2,width=8,
+                            command=lambda :boton_borrar(),font=("Arial Black",12))
     borrar_boton.grid(row=0,column=1,pady=5,padx=5)
 
     terminar_boton= tk.Button(botones_frame,text=' Terminar \n Juego ',
-                              bg='#ba4e18', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12))
+                              bg='#ba4e18', activebackground = '#646e65',height=2,width=8,
+                              command=lambda: boton_terminar(),font=("Arial Black",12))
     terminar_boton.grid(row=0,column=3,pady=5,padx=5)
 
     deshacer_boton= tk.Button(botones_frame,text=' Deshacer \n Jugada ',
-                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,
+                              command=lambda :boton_deshacer(),font=("Arial Black",12) )
     deshacer_boton.grid(row=1,column=0,pady=5,padx=5)
 
     rehacer_boton= tk.Button(botones_frame,text=' Rehacer \n Jugada  ',
-                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,
+                             command=lambda :boton_rehacer(),font=("Arial Black",12) )
     rehacer_boton.grid(row=1,column=1,pady=5,padx=5)
 
     top_boton= tk.Button(botones_frame,text=' Top \n 10 ',
@@ -711,8 +731,40 @@ def jugar():
     
     #CRONOMETRO Y TIMER
 
+    if configuracion[0]==1:
+        Cronometro_frame2 = tk.Frame(cronometro_frame,bg='#04b020',height=20,width=20)
+        Cronometro_frame2.grid(row=0,column=0)
+        cronol = tk.Label(Cronometro_frame2,text='Horas  ',bg="#04b020")    
+        cronol.grid(row=0,column=0)
+        cronol = tk.Label(Cronometro_frame2,text='Minutos ',bg="#04b020")    
+        cronol.grid(row=0,column=1)
+        cronol = tk.Label(Cronometro_frame2,text='Segundos',bg="#04b020")    
+        cronol.grid(row=0,column=2)
+
+        cronoh = tk.Label(Cronometro_frame2,text='00',bg="#04b020",font=("Arial Black",22) )    
+        cronoh.grid(row=1,column=0)
+        cronom = tk.Label(Cronometro_frame2,text='00',bg="#04b020",font=("Arial Black",22) )    
+        cronom.grid(row=1,column=1)
+        cronos = tk.Label(Cronometro_frame2,text='00',bg="#04b020",font=("Arial Black",22) )    
+        cronos.grid(row=1,column=2)
+    elif configuracion[0]==2:
+        Cronometro_frame2 = tk.Frame(cronometro_frame,bg='#04b020',height=20,width=20)
+        Cronometro_frame2.grid(row=0,column=0)
+        cronol = tk.Label(Cronometro_frame2,text='Horas  ',bg="#04b020")    
+        cronol.grid(row=0,column=0)
+        cronol = tk.Label(Cronometro_frame2,text='Minutos ',bg="#04b020")    
+        cronol.grid(row=0,column=1)
+        cronol = tk.Label(Cronometro_frame2,text='Segundos',bg="#04b020")    
+        cronol.grid(row=0,column=2)
+
+        cronoh = tk.Label(Cronometro_frame2,text=str(configuracion[1][0]),bg="#04b020",font=("Arial Black",22) )    
+        cronoh.grid(row=1,column=0)
+        cronom = tk.Label(Cronometro_frame2,text=str(configuracion[1][1]),bg="#04b020",font=("Arial Black",22) )    
+        cronom.grid(row=1,column=1)
+        cronos = tk.Label(Cronometro_frame2,text=str(configuracion[1][2]),bg="#04b020",font=("Arial Black",22) )    
+        cronos.grid(row=1,column=2)
     
-    
+ 
     #BOTONES DE GUARDAR Y CARGAR
     cargar_boton= tk.Button(botones2_frame,text=' Cargar \n Partida ',
                               bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
@@ -721,12 +773,25 @@ def jugar():
     guardar_boton= tk.Button(botones2_frame,text=' Guardar \n Partida  ',
                               bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
     guardar_boton.grid(row=0,column=1,pady=1,padx=5)
-
+    #funcion para verificar victoria
+    def verifica_victoria(lista):
+        global time_out
+        for x in lista:
+            for y in x:
+                for i in y:
+                    for j in i:
+                        if j==0:
+                            return
+        #despues de verificar que no hay espacios vacios procede a indicar la victoria
+        time_out=1
+        showmessage('Victoria!','Felicitaciones, gano el juego')
+        
+        
     #funcion para imprimir
 
     def imprimir(lista):
 
-        for x in range (3):
+         for x in range (3):
             for y in range (3):
                 partida2_frame = tk.Frame(partida_frame,bg="#b2ff17")
                 partida2_frame.grid(row=x,column=y,padx=5,pady=5)
@@ -734,15 +799,87 @@ def jugar():
                     for j in range(3):
                         if lista[x][y][i][j]==0:
                             cuadro =  tk.Button(partida2_frame,text='',
-                                              bg='#e4e9f2', activebackground = '#a5a9b0',height=2,width=6 )
+                                              bg='#e4e9f2', activebackground = '#a5a9b0',height=2,
+                                                width=6, command=partial(marca_casilla_actual,x,y,i,j) )
                             cuadro.grid(row=i,column=j,padx=2,pady=2)
                         else:
                             signo=lista[x][y][i][j]
                             cuadro =  tk.Button(partida2_frame,text=configuracion[4][signo-1],
-                                              bg='#d4a763', activebackground = '#a5a9b0',height=2,width=6,state='disabled' )
+                                              bg='#d4a763', activebackground = '#a5a9b0',height=2,
+                                                width=6,command=partial(marca_casilla_actual,x,y,i,j))
                             cuadro.grid(row=i,column=j,padx=2,pady=2)
-
+         
+         
+    def sacar_fila(lista,x,y,i,j):
+        respuesta=[]
+        respuesta=respuesta+lista[x][0][i] 
+        respuesta=respuesta+lista[x][1][i]  
+        respuesta=respuesta+lista[x][2][i]  
+        return respuesta
+    def sacar_columna(lista,x,y,i,j):
+        respuesta=[]
+        respuesta.append(  lista[0][y][0][j]  )
+        respuesta.append(  lista[0][y][1][j]  )
+        respuesta.append(  lista[0][y][2][j]  )
+        respuesta.append(  lista[1][y][0][j]  )
+        respuesta.append(  lista[1][y][1][j]  )
+        respuesta.append(  lista[1][y][2][j]  )
+        respuesta.append(  lista[2][y][0][j]  )
+        respuesta.append(  lista[2][y][1][j]  )
+        respuesta.append(  lista[2][y][2][j]  )
+        return respuesta
+    def sacar_recuadro(lista,x,y):
+        respuesta=[]
+        respuesta=respuesta+lista[x][y][0]
+        respuesta=respuesta+lista[x][y][1]
+        respuesta=respuesta+lista[x][y][2]
+        return respuesta
+    def marca_casilla_actual (x,y,i,j):
+        global lista, numero_actual , lista_inicial,time_out
+        #sacamos las diferentes listas para hacer las validaciones
+        fila=sacar_fila(lista,x,y,i,j)
+        columna=sacar_columna(lista,x,y,i,j)
+        recuadro=sacar_recuadro(lista,x,y)
+        #valida que el numero no sea el mismo
+        if lista[x][y][i][j]==numero_actual:
+            return
+        #validamos que el cuadro a editar no pertenezca a la disposicion inicial
+        if lista_inicial[x][y][i][j]!=0:
+            showmessage('Error!','No se puede sustituir este elemento por que Pertenece al cuadro inicial')
+            #prueba
+            '''
+            lista=[ [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ],
+        [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ],
+        [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ]  ]'''
+            
         
+            
+        #validamos
+        if numero_actual ==0:
+            showmessage('Error!','Debe elegir algo para agregar de la barra lateral')
+            return
+        if numero_actual in fila:
+            showmessage('Error!','No se puede agregrar este elemento por que ya esta en la fila')
+            return
+        elif numero_actual in columna:
+            showmessage('Error!','No se puede agregrar este elemento por que ya esta en la columna')
+            return
+        elif numero_actual in recuadro:
+            showmessage('Error!','No se puede agregrar este elemento por que ya esta en el recuadro')
+            return
+        
+        #una vez que pasa las validaciones la jugada es posible por lo que se agrega
+        
+        lista[x][y][i][j]=numero_actual
+        numero_actual=0
+        imprimir(lista)
+        resetear_numeral()
+
+        #se verifica victoria y se agrega la jugada
+        jugada_actual=deepcopy(lista)
+        jugadas.append(jugada_actual)
+        
+        verifica_victoria(lista)
         
     def guardar_nombre():
         global nombre
@@ -752,11 +889,85 @@ def jugar():
             return
         nombre=f
         showmessage('Éxito',"El nombre se guardo correctamente")
-        
-        
+    def boton_deshacer():
+        global jugadas,jugadas_eliminadas,lista,inicio_juego
+        if inicio_juego==0:
+            showmessage('Error','Aun no se ha iniciado el juego')
+        try:
+            jugada_actual=jugadas.pop()
+            jugadas_eliminadas.append(jugada_actual)
+            lista=deepcopy(jugada_actual)
+            imprimir(lista)
+            resetear_numeral()
+        except:
+            showmessage('Error','No hay jugadas para deshacer')
+    def boton_rehacer():
+        global jugadas,jugadas_eliminadas,lista,inicio_juego
+        if inicio_juego==0:
+            showmessage('Error','Aun no se ha iniciado el juego')
+        try:
+            jugada_actual=jugadas_eliminadas.pop()
+            lista=deepcopy(jugada_actual)
+            imprimir(lista)
+            resetear_numeral()
+        except:
+            showmessage('Error','No hay jugadas para rehacer')
+    def boton_borrar():
+        global lista,lista_inicial,jugadas,jugadas_eliminadas,inicio_juego
+        if inicio_juego==0:
+            showmessage('Error','Aun no se ha iniciado el juego')
+            
+        c=messagebox.askquestion('Borrar','Desea borrar el juego?',parent=juego)
+        if c=='yes':
+            lista=deepcopy(lista_inicial)
+            jugadas=[]
+            jugadas_eliminadas=[]
+            imprimir (lista)
+            resetear_numeral()
+        else:
+            return
+    def boton_terminar():
+        global lista,lista_inicial,jugadas,jugadas_eliminadas,inicio_juego,configuracion,h,m,s
+        if inicio_juego==0:
+            showmessage('Error','Aun no se ha iniciado el juego')
+
+        c=messagebox.askquestion('Terminar','Desea Terminar el juego?',parent=juego)
+        if c=='yes':
+            lista=deepcopy(lista_inicial)
+            jugadas=[]
+            jugadas_eliminadas=[]
+            resetear_numeral()
+            #imprime el cuadro inicial
+            f= open('sudoku2021partidas.dat','rb')
+            info=pickle.load(f)
+            f.close()
+            h=configuracion[1][0]
+            m=configuracion[1][1]
+            s=configuracion[1][2]
+            if configuracion[2]==3:
+                num=random.randint(6,8)
+                imprimir(info[num])
+                lista=info[num]
+                lista_inicial=deepcopy(info[num])
+                jugadas.append(deepcopy(info[num]))
+            elif configuracion[2]==1:
+                num=random.randint(0,2)
+                imprimir(info[num])
+                lista=info[num]
+                lista_inicial=deepcopy(info[num])
+                jugadas.append(deepcopy(info[num]))
+            elif configuracion[2]==2:
+                num=random.randint(3,5)
+                imprimir(info[num])
+                lista=info[num]
+                lista_inicial=deepcopy(info[num])
+                jugadas.append(deepcopy(info[num]))
+        else:
+            return
     def iniciar_partida():
         #se arreglan aspectos respecto al nombre y se valida
-        global nombre,lista
+        global nombre,lista,lista_inicial,h,m,s,inicio_juego,jugadas
+        inicio_juego=1
         if nombre=='':
             showmessage('Error','Debe ingresar su nombre antes de empezar a jugar')
             
@@ -790,14 +1001,151 @@ def jugar():
         if configuracion[2]==3:
             num=random.randint(6,8)
             imprimir(info[num])
-        if configuracion[2]==1:
+            lista=info[num]
+            lista_inicial=deepcopy(info[num])
+            jugadas.append(deepcopy(info[num]))
+        elif configuracion[2]==1:
             num=random.randint(0,2)
             imprimir(info[num])
-        if configuracion[2]==2:
+            lista=info[num]
+            lista_inicial=deepcopy(info[num])
+            jugadas.append(deepcopy(info[num]))
+        elif configuracion[2]==2:
             num=random.randint(3,5)
             imprimir(info[num])
-        
+            lista=info[num]
+            lista_inicial=deepcopy(info[num])
+            jugadas.append(deepcopy(info[num]))
+        #inicia el cronometro o temporizar
+        #cronometro y temporizador:
 
+        def tiempo_agotado():
+            global h,m,s
+            f=messagebox.askquestion('Tiempo Agotado!','¿Desea seguir jugando?',parent=juego)
+        
+            if f== 'yes' :
+                h=configuracion[1][0]
+                m=configuracion[1][1]
+                s=configuracion[1][2]
+                cronometro()
+            if f=='no':
+                
+                pass
+
+            
+            
+        def cronometro():
+            global m,h,s, time_out
+            if time_out==1:
+                cronoh = tk.Label(Cronometro_frame2,bg="#04b020" ,height=1,width=6)    
+                cronoh.grid(row=1,column=0)
+                cronom = tk.Label(Cronometro_frame2,bg="#04b020",height=1,width=6)    
+                cronom.grid(row=1,column=1)
+                cronos = tk.Label(Cronometro_frame2,bg="#04b020",height=1,width=6)    
+                cronos.grid(row=1,column=2)
+                cronoh = tk.Label(Cronometro_frame2,text=str(h),bg="#04b020",font=("Arial Black",22) )    
+                cronoh.grid(row=1,column=0)
+                cronom = tk.Label(Cronometro_frame2,text=str(m),bg="#04b020",font=("Arial Black",22) )    
+                cronom.grid(row=1,column=1)
+                cronos = tk.Label(Cronometro_frame2,text=str(s),bg="#04b020",font=("Arial Black",22) )
+                cronos.grid(row=1,column=2)
+                cronos.after(1000,cronometro)
+               
+            else:
+                
+                if h == 99:
+                    return
+                if m== 59:
+                    m=0
+                    h=h+1
+                if s == 59:
+                    s=0
+                    m=m+1
+                cronoh = tk.Label(Cronometro_frame2,bg="#04b020" ,height=1,width=6)    
+                cronoh.grid(row=1,column=0)
+                cronom = tk.Label(Cronometro_frame2,bg="#04b020",height=1,width=6)    
+                cronom.grid(row=1,column=1)
+                cronos = tk.Label(Cronometro_frame2,bg="#04b020",height=1,width=6)    
+                cronos.grid(row=1,column=2)
+                cronoh = tk.Label(Cronometro_frame2,text=str(h),bg="#04b020",font=("Arial Black",22) )    
+                cronoh.grid(row=1,column=0)
+                cronom = tk.Label(Cronometro_frame2,text=str(m),bg="#04b020",font=("Arial Black",22) )    
+                cronom.grid(row=1,column=1)
+                cronos = tk.Label(Cronometro_frame2,text=str(s),bg="#04b020",font=("Arial Black",22) )
+                s=s+1
+                cronos.grid(row=1,column=2)
+                cronos.after(1000,cronometro)
+            
+        def timer():
+            
+            global h,m,s,time_out
+            
+            if time_out==1:
+                cronoh = tk.Label(Cronometro_frame2,bg="#04b020" ,height=1,width=6)    
+                cronoh.grid(row=1,column=0)
+                cronom = tk.Label(Cronometro_frame2,bg="#04b020",height=1,width=6)    
+                cronom.grid(row=1,column=1)
+                cronos = tk.Label(Cronometro_frame2,bg="#04b020",height=1,width=6)    
+                cronos.grid(row=1,column=2)
+                cronoh = tk.Label(Cronometro_frame2,text=str(h),bg="#04b020",font=("Arial Black",22) )    
+                cronoh.grid(row=1,column=0)
+                cronom = tk.Label(Cronometro_frame2,text=str(m),bg="#04b020",font=("Arial Black",22) )    
+                cronom.grid(row=1,column=1)
+                cronos = tk.Label(Cronometro_frame2,text=str(s),bg="#04b020",font=("Arial Black",22) )    
+                cronos.grid(row=1,column=2)
+                cronos.after(1000,timer)
+                
+            else:
+                
+                if m==0:
+                    if h>=1:
+                        h=h-1
+                        m=59
+                if s==0:
+                    if m==0:
+                        if h==0:
+                            tiempo_agotado()
+                            return
+                    else:
+                        if m==0:
+                            h=h-1
+                            m=59
+                            s=59
+                        else:   
+                            s=59
+                            m=m-1
+                            
+                cronoh = tk.Label(Cronometro_frame2,bg="#04b020" ,height=1,width=6)    
+                cronoh.grid(row=1,column=0)
+                cronom = tk.Label(Cronometro_frame2,bg="#04b020",height=1,width=6)    
+                cronom.grid(row=1,column=1)
+                cronos = tk.Label(Cronometro_frame2,bg="#04b020",height=1,width=6)    
+                cronos.grid(row=1,column=2)
+                cronoh = tk.Label(Cronometro_frame2,text=str(h),bg="#04b020",font=("Arial Black",22) )    
+                cronoh.grid(row=1,column=0)
+                cronom = tk.Label(Cronometro_frame2,text=str(m),bg="#04b020",font=("Arial Black",22) )    
+                cronom.grid(row=1,column=1)
+                cronos = tk.Label(Cronometro_frame2,text=str(s),bg="#04b020",font=("Arial Black",22) )    
+                cronos.grid(row=1,column=2)
+                s=s-1
+                cronos.after(1000,timer)
+            
+        if configuracion[0]==1:
+            h=0
+            m=0
+            s=0
+            
+            cronometro()
+            
+        elif configuracion[0]==2:
+            h=configuracion[1][0]
+            m=configuracion[1][1]
+            s=configuracion[1][2]
+            timer()
+        
+######################################################################################################################################
+######################################################################################################################################        
+######################################################################################################################################
 #funcion configuracion
 
 def configuracion_sudoku():
@@ -1182,14 +1530,7 @@ def ayuda():
 
 
 
-#funcion showmessage
-'''
-Entradas: dos string
-Salidas: interfaz estilo cuandro de texto
-Funcion: proyecta un cuadro de texto con el titulo y el mensaje indicado
-'''
-def showmessage(titulo, mensaje):
-    messagebox.showinfo(titulo,mensaje)
+
 #funcion salir
 '''
 Entradas: un click en la interfaz
@@ -1209,48 +1550,7 @@ def salir():
 
 
 
-f= open('sudoku2021partidas.dat','wb')
-info=[ [ [ [[0,2,0],[0,6,0],[0,7,0]], [[0,3,6],[0,8,0],[0,0,5]], [[0,0,0],[0,4,1],[0,2,0]] ],
-        [ [[0,1,7],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,8,5]], [[6,0,0],[5,1,4],[0,0,7]] ],
-        [ [[7,4,0],[3,0,0],[0,9,0]], [[0,0,0],[0,9,0],[0,7,0]], [[0,0,0],[0,7,0],[1,5,0]] ]  ],
 
-      [ [ [[0,0,0],[0,9,0],[0,5,8]], [[0,9,7],[0,0,0],[2,0,0]], [[4,3,0],[0,0,0],[0,0,1]] ],
-        [ [[9,3,0],[0,0,0],[0,0,0]], [[8,1,5],[9,0,4],[0,0,6]], [[0,2,4],[1,0,0],[0,8,7]] ],
-        [ [[0,0,4],[0,1,6],[0,0,0]], [[0,5,9],[0,2,0],[0,0,0]], [[8,0,6],[0,4,0],[3,0,0]] ]  ],
-
-     [ [ [[4,0,3],[0,2,0],[0,0,5]], [[6,0,0],[0,7,3],[0,2,9]], [[0,0,2],[0,0,4],[6,0,0]] ],
-        [ [[0,5,2],[0,6,0],[0,0,0]], [[0,0,0],[0,4,0],[0,8,0]], [[3,0,0],[0,1,8],[0,0,0]] ],
-        [ [[0,0,0],[0,0,8],[0,7,1]], [[8,3,5],[2,1,0],[0,6,0]], [[7,0,0],[0,0,9],[0,0,8]] ]  ],
-#medio
-     [ [ [[0,0,2],[0,6,0],[0,0,0]], [[0,0,0],[7,4,0],[0,0,0]], [[8,0,0],[0,0,0],[0,0,5]] ],
-        [ [[0,2,0],[0,4,0],[0,9,0]], [[0,8,0],[3,0,0],[0,0,1]], [[0,0,0],[7,9,1],[0,0,0]] ],
-        [ [[4,7,0],[3,0,0],[0,0,0]], [[0,0,0],[5,0,0],[0,0,0]], [[0,0,2],[0,0,0],[3,5,6]] ]  ],
-
-     [ [ [[4,9,0],[0,0,6],[0,0,0]], [[0,0,0],[0,0,7],[4,0,0]], [[0,0,0],[0,1,0],[0,0,0]] ],
-        [ [[6,0,0],[0,0,3],[0,0,9]], [[2,0,0],[0,0,0],[7,5,0]], [[0,0,4],[6,0,0],[0,0,0]] ],
-        [ [[0,7,0],[0,0,1],[2,0,0]], [[0,0,0],[0,0,9],[6,0,3]], [[0,4,0],[8,7,0],[0,0,0]] ]  ],
-
-     [ [ [[0,1,0],[0,0,0],[0,0,0]], [[0,3,0],[6,0,9],[0,8,0]], [[0,0,0],[8,0,1],[0,3,0]] ],
-        [ [[0,5,4],[2,0,0],[0,0,9]], [[0,0,6],[0,0,1],[5,0,0]], [[0,0,0],[3,4,0],[0,0,2]] ],
-        [ [[5,0,0],[0,0,0],[0,0,0]], [[3,0,0],[9,0,0],[0,0,2]], [[0,6,9],[0,0,0],[0,0,4]] ]  ],
-#dificil
-     [ [ [[0,0,6],[5,0,0],[0,0,7]], [[0,0,7],[4,0,0],[0,0,8]], [[5,0,0],[0,6,0],[0,0,0]] ],
-        [ [[0,0,1],[3,0,0],[0,8,0]], [[0,0,6],[1,0,0],[0,2,0]], [[0,0,0],[0,9,0],[0,0,0]] ],
-        [ [[0,7,0],[0,4,0],[9,0,0]], [[0,4,0],[0,1,0],[6,0,0]], [[0,0,9],[0,0,0],[0,2,0]] ]  ],
-
-      [ [ [[1,0,0],[0,0,4],[0,9,0]], [[0,0,0],[8,0,9],[0,1,0]], [[2,0,6],[0,0,0],[0,8,0]] ],
-        [ [[0,5,0],[0,0,2],[9,0,0]], [[0,7,0],[6,0,8],[0,0,0]], [[0,3,0],[0,0,0],[6,0,1]] ],
-        [ [[0,7,0],[0,0,0],[0,0,0]], [[0,4,0],[7,0,0],[0,0,0]], [[0,1,0],[0,0,0],[0,0,3]] ]  ],
-
-       [ [ [[0,0,2],[0,5,0],[6,0,0]], [[5,0,0],[0,1,0],[0,0,9]], [[1,0,0],[0,2,0],[0,0,5]] ],
-        [ [[0,0,4],[9,0,0],[0,7,0]], [[1,0,0],[0,0,2],[0,6,0]], [[6,0,0],[0,0,4],[0,8,0]] ],
-        [ [[0,2,0],[8,0,0],[0,0,7]], [[0,7,0],[0,0,4],[8,0,0]], [[0,3,0],[0,0,6],[5,0,0]] ]  ] ]
-
-
-
-
-pickle.dump(info,f)
-f.close()
 
 
 
