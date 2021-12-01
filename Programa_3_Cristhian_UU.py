@@ -126,7 +126,7 @@ def jugar():
     botones_frame = tk.Frame(numeral_frame,bg="#b2ff17",height=225,width=350)
     botones_frame.grid(row=1,column=0,padx=1,pady=1)
     ################################################
-    cronometro_frame = tk.Frame(juego,bg="#c105ff",height=115,width=540)
+    cronometro_frame = tk.Frame(juego,bg="#b2ff17",height=115,width=540)
     cronometro_frame.grid(row=2,column=0,padx=1,pady=1)
 
     botones2_frame = tk.Frame(juego,bg="#b2ff17",height=115,width=350)
@@ -167,7 +167,7 @@ def jugar():
     
 
     #NUMEROS
-    
+    #se hace una funcion para cada numero la cual despliega todos lo demas numeros y se selecciona a si mismo
 
     boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
@@ -763,7 +763,16 @@ def jugar():
         cronom.grid(row=1,column=1)
         cronos = tk.Label(Cronometro_frame2,text=str(configuracion[1][2]),bg="#04b020",font=("Arial Black",22) )    
         cronos.grid(row=1,column=2)
-    
+    #dificultad label
+    if configuracion[2] ==3:
+        dificultad_label = tk.Label(cronometro_frame,text='Dificultad: Dificil ',font=("Arial Black",17),bg='#b2ff17')
+        dificultad_label.grid(row=0,column=1,pady=3,padx=3)
+    if configuracion[2] ==2:
+        dificultad_label = tk.Label(cronometro_frame,text='Dificultad: Normal ',font=("Arial Black",17),bg='#b2ff17')
+        dificultad_label.grid(row=0,column=1,pady=3,padx=3)
+    if configuracion[2] ==1:
+        dificultad_label = tk.Label(cronometro_frame,text='Dificultad: Fácil ',font=("Arial Black",17),bg='#b2ff17')
+        dificultad_label.grid(row=0,column=1,pady=3,padx=3)
  
     #BOTONES DE GUARDAR Y CARGAR
     cargar_boton= tk.Button(botones2_frame,text=' Cargar \n Partida ',
@@ -784,8 +793,17 @@ def jugar():
                             return
         #despues de verificar que no hay espacios vacios procede a indicar la victoria
         time_out=1
-        showmessage('Victoria!','Felicitaciones, gano el juego')
-        
+        e=showmessage('Victoria!','Felicitaciones, gano el juego, ¿desea jugar otra partida?')
+        if e==yes:
+            terminar_partida()
+        else:
+            lista=deepcopy(lista_inicial)
+            inicio_juego=0
+            jugadas=[]
+            jugadas_eliminadas=[]
+            resetear_numeral()
+            juego.destroy()
+            jugar()
         
     #funcion para imprimir
 
@@ -937,6 +955,7 @@ def jugar():
             jugadas=[]
             jugadas_eliminadas=[]
             resetear_numeral()
+            inicio_juego=0
             #imprime el cuadro inicial
             f= open('sudoku2021partidas.dat','rb')
             info=pickle.load(f)
@@ -1020,7 +1039,7 @@ def jugar():
         #cronometro y temporizador:
 
         def tiempo_agotado():
-            global h,m,s
+            global h,m,s,lista,lista_inicial,jugadas,jugadas_eliminadas,inicio_juego
             f=messagebox.askquestion('Tiempo Agotado!','¿Desea seguir jugando?',parent=juego)
         
             if f== 'yes' :
@@ -1029,8 +1048,14 @@ def jugar():
                 s=configuracion[1][2]
                 cronometro()
             if f=='no':
+                lista=deepcopy(lista_inicial)
+                inicio_juego=0
+                jugadas=[]
+                jugadas_eliminadas=[]
+                resetear_numeral()
+                juego.destroy()
+                jugar()
                 
-                pass
 
             
             
