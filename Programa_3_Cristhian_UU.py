@@ -22,7 +22,7 @@ from fpdf import FPDF
 inicio_juego=0
 #config
 #              reloj   tiempo en timer  dificutad  topx   tipo_numeral
-configuracion=[1,       (0,0,0),        1,         2,     ['1','2','3','4','5','6','7','8','9'] ]
+configuracion=[1,       (0,0,0),        1,         0,     ['1','2','3','4','5','6','7','8','9'] ]
 datos_timer=(0,0,0)
 tipo_numeral=['1','2','3','4','5','6','7','8','9']
 topx=0
@@ -76,6 +76,7 @@ numero_actual=0
 #jugadas
 jugadas=[]
 jugadas_eliminadas=[]
+no_reiniciar=0
 #Creamos la ventana principal
 ventana=tk.Tk()
 ventana.title('Juego Sudoku')
@@ -811,13 +812,50 @@ def jugar():
  
     #BOTONES DE GUARDAR Y CARGAR
     cargar_boton= tk.Button(botones2_frame,text=' Cargar \n Partida ',
-                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,
+                            command=lambda :cargar_partida(),font=("Arial Black",12) )
     cargar_boton.grid(row=0,column=0,pady=1,padx=5)
 
     guardar_boton= tk.Button(botones2_frame,text=' Guardar \n Partida  ',
-                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
+                              bg='#148bb3', activebackground = '#646e65',height=2,width=8,
+                             command=lambda :guardar_partida(),font=("Arial Black",12) )
     guardar_boton.grid(row=0,column=1,pady=1,padx=5)
-
+    #funcion para el boton guardar partida
+    def guardar_partida():
+        global h,m,s,configuracion,tipo_numeral,inicio_juego,top_jugadores,nombre,time_out,lista,lista_inicial,jugadas,jugadas_eliminadas
+        if inicio_juego==0:
+            showmessage('Error','Aun no se ha iniciado el juego')
+            return
+        
+        time_out=1
+        info=[h,m,s,configuracion,tipo_numeral,top_jugadores,nombre,lista,lista_inicial,jugadas,jugadas_eliminadas]
+        f = open("sudoku2021juegoactual.dat", "wb")
+        pickle.dump(info,f)
+        f.close()
+        showmessage('Exito','El juego se guardo correctamente')
+        time_out=0
+    def cargar_partida():
+        global no_reiniciar ,h,m,s,configuracion,tipo_numeral,inicio_juego,top_jugadores,nombre,time_out,lista,lista_inicial,jugadas,jugadas_eliminadas
+        if inicio_juego==1:
+            showmessage('Error','El juego ya se inicio')
+            return
+        no_reiniciar=1
+        f = open("sudoku2021juegoactual.dat", "rb")
+        info=pickle.load(f)
+        h=info[0]
+        m=info[1]
+        s=info[2]
+        configuracion=info[3]
+        tipo_numeral=info[4]
+        top_jugadores=info[5]
+        nombre=info[6]
+        lista=info[7]
+        lista_inicial=info[8]
+        jugadas=info[9]
+        jugadas_eliminadas=info[10]
+        showmessage('Exito','El juego se cargo correctamente, para continuar pulse en iniciar partida')
+        
+     
     #funcion para el boton top
     def boton_top():
         global time_out,configuracion,top_jugadores,inicio_juego
@@ -1000,10 +1038,11 @@ def jugar():
             showmessage('Error!','No se puede sustituir este elemento por que Pertenece al cuadro inicial')
             
             #prueba
-            
+            '''
             lista=[ [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ],
         [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ],
         [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ]  ]
+            '''
             return
         
             
@@ -1131,7 +1170,7 @@ def jugar():
             return
     def iniciar_partida():
         #se arreglan aspectos respecto al nombre y se valida
-        global nombre,lista,lista_inicial,h,m,s,inicio_juego,jugadas
+        global nombre,lista,lista_inicial,h,m,s,inicio_juego,jugadas,no_reiniciar
         inicio_juego=1
         if nombre=='':
             showmessage('Error','Debe ingresar su nombre antes de empezar a jugar')
@@ -1159,27 +1198,31 @@ def jugar():
         #se habilita el numeral
         resetear_numeral()
         #imprime el cuadro inicial
-        f= open('sudoku2021partidas.dat','rb')
-        info=pickle.load(f)
-        f.close()
+        if no_reiniciar==1:
+            imprimir(lista)
+            
+        else:
+            f= open('sudoku2021partidas.dat','rb')
+            info=pickle.load(f)
+            f.close()
 
-        if configuracion[2]==3:
-            num=random.randint(6,8)
-            imprimir(info[num])
-            lista=info[num]
-            lista_inicial=deepcopy(info[num])
-            
-        elif configuracion[2]==1:
-            num=random.randint(0,2)
-            imprimir(info[num])
-            lista=info[num]
-            lista_inicial=deepcopy(info[num])
-            
-        elif configuracion[2]==2:
-            num=random.randint(3,5)
-            imprimir(info[num])
-            lista=info[num]
-            lista_inicial=deepcopy(info[num])
+            if configuracion[2]==3:
+                num=random.randint(6,8)
+                imprimir(info[num])
+                lista=info[num]
+                lista_inicial=deepcopy(info[num])
+                
+            elif configuracion[2]==1:
+                num=random.randint(0,2)
+                imprimir(info[num])
+                lista=info[num]
+                lista_inicial=deepcopy(info[num])
+                
+            elif configuracion[2]==2:
+                num=random.randint(3,5)
+                imprimir(info[num])
+                lista=info[num]
+                lista_inicial=deepcopy(info[num])
             
         #inicia el cronometro o temporizar
         #cronometro y temporizador:
@@ -1302,16 +1345,24 @@ def jugar():
                 cronos.after(1000,timer)
             
         if configuracion[0]==1:
-            h=0
-            m=0
-            s=0
+            if no_reiniciar==1:
+                no_reiniciar=0
+            else:
+                h=0
+                m=0
+                s=0
             
             cronometro()
             
         elif configuracion[0]==2:
-            h=configuracion[1][0]
-            m=configuracion[1][1]
-            s=configuracion[1][2]
+            if no_reiniciar==1:
+                
+                no_reiniciar=0
+            else:
+                
+                h=configuracion[1][0]
+                m=configuracion[1][1]
+                s=configuracion[1][2]
             timer()
         
 ######################################################################################################################################
