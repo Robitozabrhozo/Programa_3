@@ -650,6 +650,7 @@ def jugar():
                                   bg='#51db7b', activebackground = '#bac2bd',height=1,width=3,
                              font=("Arial Black",14),command=lambda:numero9(),state='disabled')
         boton_9.grid(row=2,column=2,padx=3,pady=3)
+        
     def resetear_numeral():
         boton_1 =  tk.Button(numeros_frame,text=configuracion[4][0],
                               bg='#bac2bd', activebackground = '#51db7b',height=1,width=3,
@@ -853,7 +854,7 @@ def jugar():
         respuesta=respuesta+lista[x][y][2]
         return respuesta
     def marca_casilla_actual (x,y,i,j):
-        global lista, numero_actual , lista_inicial,time_out
+        global lista, numero_actual , lista_inicial,time_out,jugadas
         #sacamos las diferentes listas para hacer las validaciones
         fila=sacar_fila(lista,x,y,i,j)
         columna=sacar_columna(lista,x,y,i,j)
@@ -864,19 +865,20 @@ def jugar():
         #validamos que el cuadro a editar no pertenezca a la disposicion inicial
         if lista_inicial[x][y][i][j]!=0:
             showmessage('Error!','No se puede sustituir este elemento por que Pertenece al cuadro inicial')
+            
             #prueba
             '''
             lista=[ [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ],
         [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ],
         [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ]  ]'''
-            
+            return
         
             
         #validamos
-        if numero_actual ==0:
+        elif numero_actual ==0:
             showmessage('Error!','Debe elegir algo para agregar de la barra lateral')
             return
-        if numero_actual in fila:
+        elif numero_actual in fila:
             showmessage('Error!','No se puede agregrar este elemento por que ya esta en la fila')
             return
         elif numero_actual in columna:
@@ -886,17 +888,16 @@ def jugar():
             showmessage('Error!','No se puede agregrar este elemento por que ya esta en el recuadro')
             return
         
-        #una vez que pasa las validaciones la jugada es posible por lo que se agrega
+        #una vez que pasa las validaciones la jugada es posible por lo que se agrega y se agrega la jugada
+        jugadas.append(deepcopy(lista))
         
         lista[x][y][i][j]=numero_actual
         numero_actual=0
         imprimir(lista)
         resetear_numeral()
 
-        #se verifica victoria y se agrega la jugada
-        jugada_actual=deepcopy(lista)
-        jugadas.append(jugada_actual)
-        
+        #se verifica victoria
+       
         verifica_victoria(lista)
         
     def guardar_nombre():
@@ -905,35 +906,46 @@ def jugar():
         if len(f)>30:
             showmessage('Error','El nombre no puede exeder los 30 caracteres')
             return
+        elif f =="":
+            showmessage('Error','Nombre Vacio')
+            return
+        
         nombre=f
         showmessage('Éxito',"El nombre se guardo correctamente")
     def boton_deshacer():
         global jugadas,jugadas_eliminadas,lista,inicio_juego
         if inicio_juego==0:
             showmessage('Error','Aun no se ha iniciado el juego')
-        try:
-            jugada_actual=jugadas.pop()
-            jugadas_eliminadas.append(jugada_actual)
-            lista=deepcopy(jugada_actual)
-            imprimir(lista)
-            resetear_numeral()
-        except:
+            return
+        if jugadas==[]:
             showmessage('Error','No hay jugadas para deshacer')
+        else:
+            jugadas_eliminadas.append(lista)
+            jugada_actual=jugadas.pop()
+            lista=deepcopy(jugada_actual)
+            imprimir(jugada_actual)
+            resetear_numeral()
+        
+            
     def boton_rehacer():
         global jugadas,jugadas_eliminadas,lista,inicio_juego
         if inicio_juego==0:
             showmessage('Error','Aun no se ha iniciado el juego')
-        try:
+            return
+        if jugadas_eliminadas==[]:
+            showmessage('Error','No hay jugadas para rehacer')
+        else:
+            jugadas.append(lista)
             jugada_actual=jugadas_eliminadas.pop()
             lista=deepcopy(jugada_actual)
-            imprimir(lista)
+            imprimir(jugada_actual)
             resetear_numeral()
-        except:
-            showmessage('Error','No hay jugadas para rehacer')
+            
     def boton_borrar():
         global lista,lista_inicial,jugadas,jugadas_eliminadas,inicio_juego
         if inicio_juego==0:
             showmessage('Error','Aun no se ha iniciado el juego')
+            return
             
         c=messagebox.askquestion('Borrar','Desea borrar el juego?',parent=juego)
         if c=='yes':
@@ -942,12 +954,14 @@ def jugar():
             jugadas_eliminadas=[]
             imprimir (lista)
             resetear_numeral()
+            
         else:
             return
     def boton_terminar():
         global lista,lista_inicial,jugadas,jugadas_eliminadas,inicio_juego,configuracion,h,m,s
         if inicio_juego==0:
             showmessage('Error','Aun no se ha iniciado el juego')
+            return
 
         c=messagebox.askquestion('Terminar','Desea Terminar el juego?',parent=juego)
         if c=='yes':
@@ -955,7 +969,6 @@ def jugar():
             jugadas=[]
             jugadas_eliminadas=[]
             resetear_numeral()
-            inicio_juego=0
             #imprime el cuadro inicial
             f= open('sudoku2021partidas.dat','rb')
             info=pickle.load(f)
@@ -968,19 +981,19 @@ def jugar():
                 imprimir(info[num])
                 lista=info[num]
                 lista_inicial=deepcopy(info[num])
-                jugadas.append(deepcopy(info[num]))
+                
             elif configuracion[2]==1:
                 num=random.randint(0,2)
                 imprimir(info[num])
                 lista=info[num]
                 lista_inicial=deepcopy(info[num])
-                jugadas.append(deepcopy(info[num]))
+                
             elif configuracion[2]==2:
                 num=random.randint(3,5)
                 imprimir(info[num])
                 lista=info[num]
                 lista_inicial=deepcopy(info[num])
-                jugadas.append(deepcopy(info[num]))
+                
         else:
             return
     def iniciar_partida():
@@ -1022,19 +1035,19 @@ def jugar():
             imprimir(info[num])
             lista=info[num]
             lista_inicial=deepcopy(info[num])
-            jugadas.append(deepcopy(info[num]))
+            
         elif configuracion[2]==1:
             num=random.randint(0,2)
             imprimir(info[num])
             lista=info[num]
             lista_inicial=deepcopy(info[num])
-            jugadas.append(deepcopy(info[num]))
+            
         elif configuracion[2]==2:
             num=random.randint(3,5)
             imprimir(info[num])
             lista=info[num]
             lista_inicial=deepcopy(info[num])
-            jugadas.append(deepcopy(info[num]))
+            
         #inicia el cronometro o temporizar
         #cronometro y temporizador:
 
