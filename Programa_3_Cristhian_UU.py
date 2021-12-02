@@ -18,13 +18,46 @@ from playsound import playsound
 import pickle
 from functools import partial
 from copy import deepcopy
+from fpdf import FPDF
 inicio_juego=0
 #config
 #              reloj   tiempo en timer  dificutad  topx   tipo_numeral
-configuracion=[1,       (0,0,0),        1,         0,     ['1','2','3','4','5','6','7','8','9'] ]
+configuracion=[1,       (0,0,0),        1,         2,     ['1','2','3','4','5','6','7','8','9'] ]
 datos_timer=(0,0,0)
 tipo_numeral=['1','2','3','4','5','6','7','8','9']
 topx=0
+#top
+
+top_jugadores=[]
+
+class victoria_jugador:
+    def __init__(self,nombre,tiempo,dificultad):
+        self.nombre=nombre
+        self.tiempo=tiempo
+        self.dificultad=dificultad
+cris=victoria_jugador('cris',(0,2,0),1)
+fabi=victoria_jugador('fabi',(0,3,0),1)
+mainor=victoria_jugador('mainor',(0,4,0),1)
+
+top_jugadores.append(cris)
+top_jugadores.append(fabi)
+top_jugadores.append(mainor)
+
+cris=victoria_jugador('cris',(0,2,0),2)
+fabi=victoria_jugador('fabi',(0,3,0),2)
+mainor=victoria_jugador('mainor',(0,4,0),2)
+
+top_jugadores.append(cris)
+top_jugadores.append(fabi)
+top_jugadores.append(mainor)
+
+cris=victoria_jugador('cris',(0,2,0),3)
+fabi=victoria_jugador('fabi',(0,3,0),3)
+mainor=victoria_jugador('mainor',(0,4,0),3)
+top_jugadores.append(cris)
+top_jugadores.append(fabi)
+top_jugadores.append(mainor)
+
 #nombre
 nombre=''
 #tiempo
@@ -726,6 +759,7 @@ def jugar():
     rehacer_boton.grid(row=1,column=1,pady=5,padx=5)
 
     top_boton= tk.Button(botones_frame,text=' Top \n 10 ',
+                             command=lambda :boton_top(),
                               bg='#f5c507', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
     top_boton.grid(row=1,column=3,pady=5,padx=5)
     
@@ -783,9 +817,103 @@ def jugar():
     guardar_boton= tk.Button(botones2_frame,text=' Guardar \n Partida  ',
                               bg='#148bb3', activebackground = '#646e65',height=2,width=8,font=("Arial Black",12) )
     guardar_boton.grid(row=0,column=1,pady=1,padx=5)
+
+    #funcion para el boton top
+    def boton_top():
+        global time_out,configuracion,top_jugadores,inicio_juego
+        #se valida que el juego haya iniciado
+        if inicio_juego==0:
+            showmessage('Error','Aun no se ha iniciado el juego')
+            return
+        #se detienen los contadores 
+        time_out=1
+
+        facil=[]
+        medio=[]
+        dificil=[]
+        cantidad=configuracion[3]
+        
+            
+        #se distrubuyen las jugasdas segun dificultad
+        for jugador in top_jugadores :
+            if jugador.dificultad==1:
+                facil.append(jugador)
+            if jugador.dificultad==2:
+                medio.append(jugador)
+            if jugador.dificultad==3:
+                dificil.append(jugador)
+        #se ordenan
+        facil.sort(key=lambda x:x.tiempo[0]*60*60+x.tiempo[1]*60+x.tiempo[2])
+        medio.sort(key=lambda x:x.tiempo[0]*60*60+x.tiempo[1]*60+x.tiempo[2])
+        dificil.sort(key=lambda x:x.tiempo[0]*60*60+x.tiempo[1]*60+x.tiempo[2])
+
+        #se crea el pdf
+        pdf = FPDF('P', 'mm',(250,300))
+        pdf.add_page()
+        pdf.set_font('arial', '', 16)
+        pdf.cell(0, 5,'Top de jugadores por dificultad', 0,2)
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'Nivel Dificil:', 0,2)
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'   Tiempo     Jugador', 0,1)
+        pdf.cell(0, 5,'                       ', 0,1)
+        
+        contador=1
+        for jugador in dificil:
+             
+            pdf.cell(0, 5,str(contador)+'. '+str(jugador.tiempo[0])+':'+str(jugador.tiempo[1])+
+                     ':'+str(jugador.tiempo[2])+'        '+jugador.nombre, 0,1)
+            pdf.cell(0, 5,'                       ', 0,1)
+            if contador==cantidad:
+                
+                break
+                
+            contador = contador+1
+
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'Nivel Medio:', 0,2)
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'   Tiempo     Jugador', 0,1)
+        pdf.cell(0, 5,'                       ', 0,1)
+        contador=1
+        for jugador in medio:
+            
+            pdf.cell(0, 5,str(contador)+'. '+str(jugador.tiempo[0])+':'+str(jugador.tiempo[1])+
+                     ':'+str(jugador.tiempo[2])+'        '+jugador.nombre, 0,1)
+            pdf.cell(0, 5,'                       ', 0,1)
+            if contador==cantidad:
+                
+                break
+            contador = contador+1
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'Nivel Facil:', 0,2)
+        pdf.cell(0, 5,'                       ', 0,1)
+        pdf.cell(0, 5,'   Tiempo     Jugador', 0,1)
+        pdf.cell(0, 5,'                       ', 0,1)
+        contador=1
+        for jugador in facil:
+            
+            pdf.cell(0, 5,str(contador)+'. '+str(jugador.tiempo[0])+':'+str(jugador.tiempo[1])+
+                     ':'+str(jugador.tiempo[2])+'        '+jugador.nombre, 0,1)
+            pdf.cell(0, 5,'                       ', 0,1)
+            if contador==cantidad:
+                
+                break
+            contador = contador+1
+        
+        pdf.output('Sudoku2021topx.pdf')
+        os.startfile('Sudoku2021topx.pdf')
+        
+        showmessage('Tiempo fuera!','El juego esta en pausa mientras mira el top, pulse aceptar para continuar ')
+        #se continua el contador
+        time_out=0
     #funcion para verificar victoria
     def verifica_victoria(lista):
-        global time_out
+        global time_out,nombre,h,m,s,top_jugadores,configuracion
         for x in lista:
             for y in x:
                 for i in y:
@@ -795,8 +923,13 @@ def jugar():
         #despues de verificar que no hay espacios vacios procede a indicar la victoria
         time_out=1
         e=showmessage('Victoria!','Felicitaciones, gano el juego, ¿desea jugar otra partida?')
-        if e==yes:
-            terminar_partida()
+        #agregamos el jugador a la lista del top
+        a=victoria_jugador(nombre,(h,m,s),configuracion[2])
+        top_jugadores.append(a)
+        #actuamos segun la respuesta
+        if e=='yes':
+            boton_terminar()
+            
         else:
             lista=deepcopy(lista_inicial)
             inicio_juego=0
@@ -867,10 +1000,10 @@ def jugar():
             showmessage('Error!','No se puede sustituir este elemento por que Pertenece al cuadro inicial')
             
             #prueba
-            '''
+            
             lista=[ [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ],
         [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ],
-        [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ]  ]'''
+        [ [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]], [[1,1,1],[1,1,1],[1,1,1]] ]  ]
             return
         
             
